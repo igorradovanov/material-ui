@@ -4,13 +4,14 @@ title: React Badge component
 components: Badge
 githubLabel: 'component: badge'
 unstyled: /base-ui/react-badge/
+githubSource: packages/mui-material/src/Badge
 ---
 
 # Badge
 
 <p class="description">Badge generates a small badge to the top-right of its child(ren).</p>
 
-{{"component": "modules/components/ComponentLinkHeader.js"}}
+{{"component": "@mui/docs/ComponentLinkHeader"}}
 
 ## Basic badge
 
@@ -71,16 +72,3 @@ You can't rely on the content of the badge to be announced correctly.
 You should provide a full description, for instance, with `aria-label`:
 
 {{"demo": "AccessibleBadges.js"}}
-
-## Experimental APIs
-
-### Material You version
-
-The default Material UI Badge component follows the Material Design 2 specs.
-To get the Material You ([Material Design 3](https://m3.material.io/)) version, use the new experimental `@mui/material-next` package:
-
-```js
-import Badge from '@mui/material-next/Badge';
-```
-
-{{"demo": "BadgeMaterialYouPlayground.js", "hideToolbar": true, "bg": "playground"}}

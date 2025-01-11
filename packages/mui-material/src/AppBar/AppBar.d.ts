@@ -16,10 +16,13 @@ export interface AppBarOwnProps {
   /**
    * The color of the component.
    * It supports both default and custom theme colors, which can be added as shown in the
-   * [palette customization guide](https://mui.com/material-ui/customization/palette/#adding-new-colors).
+   * [palette customization guide](https://mui.com/material-ui/customization/palette/#custom-colors).
    * @default 'primary'
    */
-  color?: OverridableStringUnion<PropTypes.Color | 'transparent', AppBarPropsColorOverrides>;
+  color?: OverridableStringUnion<
+    PropTypes.Color | 'transparent' | 'error' | 'info' | 'success' | 'warning',
+    AppBarPropsColorOverrides
+  >;
   /**
    * If true, the `color` prop is applied in dark mode.
    * @default false
@@ -27,7 +30,7 @@ export interface AppBarOwnProps {
   enableColorOnDark?: boolean;
   /**
    * The positioning type. The behavior of the different options is described
-   * [in the MDN web docs](https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Positioning).
+   * [in the MDN web docs](https://developer.mozilla.org/en-US/docs/Web/CSS/position).
    * Note: `sticky` is not universally supported and will fall back to `static` when unavailable.
    * @default 'fixed'
    */

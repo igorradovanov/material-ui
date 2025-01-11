@@ -1,18 +1,18 @@
 # Next.js App Router
 
-<p class="description">Learn how to use Joy UI with the Next.js App Router.</p>
+<p class="description">Learn how to use Joy UI with the Next.js App Router.</p>
 
-:::info
+## Example
+
 Starting fresh on a new App Router-based project?
 
-Jump right into the code with [this example: Joy UI - Next.js App Router with TypeScript](https://github.com/mui/material-ui/tree/master/examples/joy-ui-nextjs-ts).
-:::
+Jump right into the code with [this example: Joy UI - Next.js App Router with TypeScript](https://github.com/mui/material-ui/tree/master/examples/joy-ui-nextjs-ts).
 
 ## Next.js and React Server Components
 
 The Next.js App Router implements React Server Components, [an upcoming feature for React](https://github.com/reactjs/rfcs/blob/main/text/0227-server-module-conventions.md).
 
-To support the App Router, currently all components and hooks from Joy UI and other MUI libraries are exported with the `"use client"` directive.
+To support the App Router, the components and hooks from Joy UI that need access to browser APIs are exported with the `"use client"` directive.
 
 :::warning
 React Server Components should not be conflated with the concept of server-side rendering (SSR).
@@ -21,9 +21,9 @@ So-called Client Components are still server-rendered to HTML.
 For more details, see [this explanation](https://github.com/reactwg/server-components/discussions/4) of Client Components and SSR from the React Working Group.
 :::
 
-## Using Joy UI with the App Router
+## Using Joy UI with the App Router
 
-To set up Joy UI, create a custom `ThemeRegistry` component that combines the Emotion `CacheProvider`, Joy UI's `CssVarsProvider` and the `useServerInsertedHTML` hook from `next/navigation` as follows:
+To set up Joy UI, create a custom `ThemeRegistry` component that combines the Emotion `CacheProvider`, Joy UI's `CssVarsProvider` and the `useServerInsertedHTML` hook from `next/navigation` as follows:
 
 ```tsx
 // app/ThemeRegistry.tsx
@@ -93,51 +93,52 @@ export default function ThemeRegistry(props) {
 
 // app/layout.tsx
 export default function RootLayout(props) {
-  const { children } = props;
   return (
     <html lang="en">
       <body>
-        <ThemeRegistry options={{ key: 'joy' }}>{children}</ThemeRegistry>
+        <ThemeRegistry options={{ key: 'joy' }}>{props.children}</ThemeRegistry>
       </body>
     </html>
   );
 }
 ```
 
-## Function props
+## Props serialization
 
 Props passed from server components-for example `page.js` or other routing files-must be [serializable](https://nextjs.org/docs/app/building-your-application/rendering/composition-patterns#passing-props-from-server-to-client-components-serialization).
 
+:::success
 This works without any additional directives:
 
-```jsx
+```tsx
 // app/page.tsx
 import Sheet from '@mui/joy/Sheet';
 import Typography from '@mui/joy/Typography';
 
 export default function Page() {
   return (
-    <Sheet variant="outlined">
+    <Sheet>
       <Typography fontSize="sm">Hello World</Typography>
     </Sheet>
   );
 }
 ```
 
+:::
+
 :::error
-This code snippet _doesn't work_, because the Button's click handler is **non-serializable**:
+This _doesn't work_ because the Button's click handler is **non-serializable**:
 
 ```tsx
-// page.tsx
+// app/page.tsx
 import Button from '@mui/joy/Button';
 import Sheet from '@mui/joy/Sheet';
 
 export default function Page() {
   return (
-    <Sheet variant="outlined">
+    <Sheet>
       {/* Next.js won't render this button without 'use-client' */}
       <Button
-        variant="outlined"
         onClick={() => {
           console.log('handle click');
         }}

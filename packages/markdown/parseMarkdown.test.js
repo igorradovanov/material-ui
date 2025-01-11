@@ -1,5 +1,13 @@
 import { expect } from 'chai';
-import { getContents, getDescription, getTitle, getHeaders, getCodeblock } from './parseMarkdown';
+import {
+  getContents,
+  getDescription,
+  getTitle,
+  getHeaders,
+  getCodeblock,
+  renderMarkdown,
+  createRender,
+} from './parseMarkdown';
 
 describe('parseMarkdown', () => {
   describe('getTitle', () => {
@@ -232,6 +240,87 @@ authors:
           },
         ],
       });
+    });
+  });
+
+  describe('renderMarkdown', () => {
+    it('should render markdown lists correctly', () => {
+      expect(
+        renderMarkdown(
+          [
+            'The track presentation:',
+            '- `normal` the track will render a bar representing the slider value.',
+            '- `inverted` the track will render a bar representing the remaining slider value.',
+            '- `false` the track will render without a bar.',
+          ].join('\n'),
+        ),
+      ).to.equal(
+        [
+          '<p>The track presentation:</p>',
+          '<ul>',
+          '<li><code>normal</code> the track will render a bar representing the slider value.</li>',
+          '<li><code>inverted</code> the track will render a bar representing the remaining slider value.</li>',
+          '<li><code>false</code> the track will render without a bar.</li>',
+          '</ul>',
+          '',
+        ].join('\n'),
+      );
+    });
+
+    it('should render inline descriptions correctly', () => {
+      expect(
+        renderMarkdown(
+          'Allows to control whether the dropdown is open. This is a controlled counterpart of `defaultOpen`.',
+        ),
+      ).to.equal(
+        'Allows to control whether the dropdown is open. This is a controlled counterpart of <code>defaultOpen</code>.',
+      );
+    });
+  });
+
+  describe('createRender', () => {
+    it('should collect headers correctly', () => {
+      const context = { toc: [], headingHashes: {} };
+      const render = createRender(context);
+
+      expect(
+        render(
+          [
+            '# Accordion',
+            '## Basic features 🧪',
+            '## Using `slots` and `slotProps`',
+            '### Specific example',
+          ].join('\n'),
+        ),
+      ).to.equal(
+        [
+          `<h1>Accordion</h1>`,
+          `<h2 id="basic-features"><a href="#basic-features" class="title-link-to-anchor">Basic features 🧪<span class="anchor-icon"><svg><use xlink:href="#anchor-link-icon" /></svg></span></a><button title="Post a comment" class="comment-link" data-feedback-hash="basic-features"><svg><use xlink:href="#comment-link-icon" /></svg></button></h2>`,
+          `<h2 id="using-slots-and-slotprops"><a href="#using-slots-and-slotprops" class="title-link-to-anchor">Using <code>slots</code> and <code>slotProps</code><span class="anchor-icon"><svg><use xlink:href="#anchor-link-icon" /></svg></span></a><button title="Post a comment" class="comment-link" data-feedback-hash="using-slots-and-slotprops"><svg><use xlink:href="#comment-link-icon" /></svg></button></h2>`,
+          `<h3 id="specific-example"><a href="#specific-example" class="title-link-to-anchor">Specific example<span class="anchor-icon"><svg><use xlink:href="#anchor-link-icon" /></svg></span></a><button title="Post a comment" class="comment-link" data-feedback-hash="specific-example"><svg><use xlink:href="#comment-link-icon" /></svg></button></h3>`,
+        ].join(''),
+      );
+
+      expect(context.toc).to.deep.equal([
+        {
+          children: [],
+          hash: 'basic-features',
+          level: 2,
+          text: 'Basic features 🧪',
+        },
+        {
+          children: [
+            {
+              hash: 'specific-example',
+              level: 3,
+              text: 'Specific example',
+            },
+          ],
+          hash: 'using-slots-and-slotprops',
+          level: 2,
+          text: 'Using slots and slotProps',
+        },
+      ]);
     });
   });
 });

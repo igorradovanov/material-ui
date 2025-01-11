@@ -37,31 +37,16 @@ import EditorToolbar from './EditorToolbar';
 
 export default function MyProfile() {
   return (
-    <Box
-      sx={{
-        flex: 1,
-        width: '100%',
-      }}
-    >
+    <Box sx={{ flex: 1, width: '100%' }}>
       <Box
         sx={{
           position: 'sticky',
-          top: {
-            sm: -100,
-            md: -110,
-          },
+          top: { sm: -100, md: -110 },
           bgcolor: 'background.body',
           zIndex: 9995,
         }}
       >
-        <Box
-          sx={{
-            px: {
-              xs: 2,
-              md: 6,
-            },
-          }}
-        >
+        <Box sx={{ px: { xs: 2, md: 6 } }}>
           <Breadcrumbs
             size="sm"
             aria-label="breadcrumbs"
@@ -80,45 +65,32 @@ export default function MyProfile() {
               underline="hover"
               color="neutral"
               href="#some-link"
-              fontSize={12}
-              fontWeight={500}
+              sx={{ fontSize: 12, fontWeight: 500 }}
             >
               Users
             </Link>
-            <Typography color="primary" fontWeight={500} fontSize={12}>
+            <Typography color="primary" sx={{ fontWeight: 500, fontSize: 12 }}>
               My profile
             </Typography>
           </Breadcrumbs>
-          <Typography
-            level="h2"
-            sx={{
-              mt: 1,
-              mb: 2,
-            }}
-          >
+          <Typography level="h2" component="h1" sx={{ mt: 1, mb: 2 }}>
             My profile
           </Typography>
         </Box>
-        <Tabs
-          defaultValue={0}
-          sx={{
-            bgcolor: 'transparent',
-          }}
-        >
+        <Tabs defaultValue={0} sx={{ bgcolor: 'transparent' }}>
           <TabList
             tabFlex={1}
             size="sm"
             sx={{
-              pl: {
-                xs: 0,
-                md: 4,
-              },
+              pl: { xs: 0, md: 4 },
               justifyContent: 'left',
               [`&& .${tabClasses.root}`]: {
+                fontWeight: '600',
                 flex: 'initial',
-                bgcolor: 'transparent',
+                color: 'text.tertiary',
                 [`&.${tabClasses.selected}`]: {
-                  fontWeight: '600',
+                  bgcolor: 'transparent',
+                  color: 'text.primary',
                   '&::after': {
                     height: '2px',
                     bgcolor: 'primary.500',
@@ -142,21 +114,14 @@ export default function MyProfile() {
           </TabList>
         </Tabs>
       </Box>
-
       <Stack
         spacing={4}
         sx={{
           display: 'flex',
           maxWidth: '800px',
           mx: 'auto',
-          px: {
-            xs: 2,
-            md: 6,
-          },
-          py: {
-            xs: 2,
-            md: 3,
-          },
+          px: { xs: 2, md: 6 },
+          py: { xs: 2, md: 3 },
         }}
       >
         <Card>
@@ -207,13 +172,7 @@ export default function MyProfile() {
               <Stack spacing={1}>
                 <FormLabel>Name</FormLabel>
                 <FormControl
-                  sx={{
-                    display: {
-                      sm: 'flex-column',
-                      md: 'flex-row',
-                    },
-                    gap: 2,
-                  }}
+                  sx={{ display: { sm: 'flex-column', md: 'flex-row' }, gap: 2 }}
                 >
                   <Input size="sm" placeholder="First name" />
                   <Input size="sm" placeholder="Last name" sx={{ flexGrow: 1 }} />
@@ -249,13 +208,13 @@ export default function MyProfile() {
                   >
                     <Option value="1">
                       Indochina Time (Bangkok){' '}
-                      <Typography textColor="text.tertiary" ml={0.5}>
+                      <Typography textColor="text.tertiary" sx={{ ml: 0.5 }}>
                         — GMT+07:00
                       </Typography>
                     </Option>
                     <Option value="2">
                       Indochina Time (Ho Chi Minh City){' '}
-                      <Typography textColor="text.tertiary" ml={0.5}>
+                      <Typography textColor="text.tertiary" sx={{ ml: 0.5 }}>
                         — GMT+07:00
                       </Typography>
                     </Option>
@@ -317,7 +276,6 @@ export default function MyProfile() {
                 </FormControl>
               </Stack>
             </Stack>
-
             <FormControl>
               <FormLabel>Role</FormLabel>
               <Input size="sm" defaultValue="UI Developer" />
@@ -333,7 +291,6 @@ export default function MyProfile() {
                 sx={{ flexGrow: 1 }}
               />
             </FormControl>
-
             <div>
               <CountrySelector />
             </div>
@@ -347,13 +304,13 @@ export default function MyProfile() {
                 >
                   <Option value="1">
                     Indochina Time (Bangkok){' '}
-                    <Typography textColor="text.tertiary" ml={0.5}>
+                    <Typography textColor="text.tertiary" sx={{ ml: 0.5 }}>
                       — GMT+07:00
                     </Typography>
                   </Option>
                   <Option value="2">
                     Indochina Time (Ho Chi Minh City){' '}
-                    <Typography textColor="text.tertiary" ml={0.5}>
+                    <Typography textColor="text.tertiary" sx={{ ml: 0.5 }}>
                       — GMT+07:00
                     </Typography>
                   </Option>
@@ -410,14 +367,13 @@ export default function MyProfile() {
               Share a few snippets of your work.
             </Typography>
           </Box>
-
           <Divider />
           <Stack spacing={2} sx={{ my: 1 }}>
             <DropZone />
             <FileUpload
               icon={<InsertDriveFileRoundedIcon />}
               fileName="Tech design requirements.pdf"
-              fileSize="200 KB"
+              fileSize="200 kB"
               progress={100}
             />
             <FileUpload
