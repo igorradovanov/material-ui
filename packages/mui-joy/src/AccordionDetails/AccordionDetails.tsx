@@ -68,7 +68,6 @@ const AccordionDetailsContent = styled('div', {
 });
 
 /**
- * ⚠️ AccordionDetails must be used as a direct child of the [Card](https://mui.com/joy-ui/react-card/) component.
  *
  * Demos:
  *
@@ -99,27 +98,28 @@ const AccordionDetails = React.forwardRef(function AccordionDetails(inProps, ref
   const handleRef = useForkRef(rootRef, ref);
 
   React.useEffect(() => {
-    // When accordion is closed, prevent tabbing into the details content.
     if (rootRef.current) {
       const elements = rootRef.current.querySelectorAll(
         'a, button, input, textarea, select, details, [tabindex]:not([tabindex="-1"])',
       );
+
       elements.forEach((elm) => {
+        const currentTabIndex = elm.getAttribute('tabindex');
+        const prevTabIndex = elm.getAttribute('data-prev-tabindex');
+
         if (expanded) {
-          const prevTabIndex = elm.getAttribute('data-prev-tabindex');
-          const currentTabIndex = elm.getAttribute('tabindex');
-
-          if (currentTabIndex && prevTabIndex) {
-            // restore tabindex
-            elm.setAttribute('tabindex', prevTabIndex);
-            elm.removeAttribute('data-prev-tabindex');
-          }
-
-          if (!prevTabIndex && !currentTabIndex) {
+          // Restore the previous tabindex if it exists, or remove it if it was "unset"
+          if (prevTabIndex === 'unset') {
             elm.removeAttribute('tabindex');
+          } else if (prevTabIndex !== null) {
+            elm.setAttribute('tabindex', prevTabIndex);
           }
+          elm.removeAttribute('data-prev-tabindex');
         } else {
-          elm.setAttribute('data-prev-tabindex', elm.getAttribute('tabindex') || '');
+          // If element has no data-prev-tabindex, store the current tabindex or "unset"
+          if (prevTabIndex === null) {
+            elm.setAttribute('data-prev-tabindex', currentTabIndex || 'unset');
+          }
           elm.setAttribute('tabindex', '-1');
         }
       });
@@ -168,10 +168,10 @@ const AccordionDetails = React.forwardRef(function AccordionDetails(inProps, ref
 }) as OverridableComponent<AccordionDetailsTypeMap>;
 
 AccordionDetails.propTypes /* remove-proptypes */ = {
-  // ----------------------------- Warning --------------------------------
-  // | These PropTypes are generated from the TypeScript type definitions |
-  // |     To update them edit TypeScript types and run "yarn proptypes"  |
-  // ----------------------------------------------------------------------
+  // ┌────────────────────────────── Warning ──────────────────────────────┐
+  // │ These PropTypes are generated from the TypeScript type definitions. │
+  // │ To update them, edit the TypeScript types and run `pnpm proptypes`. │
+  // └─────────────────────────────────────────────────────────────────────┘
   /**
    * Used to render icon or text elements inside the AccordionDetails if `src` is not set.
    * This can be an element, or just a string.

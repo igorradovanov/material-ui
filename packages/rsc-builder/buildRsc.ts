@@ -1,8 +1,8 @@
 import path from 'path';
 import * as yargs from 'yargs';
 import * as fse from 'fs-extra';
-import findComponents from '../api-docs-builder/utils/findComponents';
-import findHooks from '../api-docs-builder/utils/findHooks';
+import findComponents from '@mui-internal/api-docs-builder/utils/findComponents';
+import findHooks from '@mui-internal/api-docs-builder/utils/findHooks';
 
 type CommandOptions = { grep?: string };
 
@@ -11,6 +11,7 @@ type Project = {
   rootPath: string;
   additionalPaths?: string[];
   additionalFiles?: string[];
+  ignorePaths?: string[];
 };
 
 const PROJECTS: Project[] = [
@@ -21,18 +22,26 @@ const PROJECTS: Project[] = [
   {
     name: 'material',
     rootPath: path.join(process.cwd(), 'packages/mui-material'),
-  },
-  {
-    name: 'material-next',
-    rootPath: path.join(process.cwd(), 'packages/mui-material-next'),
+    ignorePaths: [
+      'packages/mui-material/src/InitColorSchemeScript/InitColorSchemeScript.tsx', // RSC compatible
+      'packages/mui-material/src/PigmentContainer/PigmentContainer.tsx', // RSC compatible
+      'packages/mui-material/src/PigmentGrid/PigmentGrid.tsx', // RSC compatible
+      'packages/mui-material/src/PigmentStack/PigmentStack.tsx', // RSC compatible
+    ],
   },
   {
     name: 'joy',
     rootPath: path.join(process.cwd(), 'packages/mui-joy'),
+    ignorePaths: [
+      'packages/mui-joy/src/InitColorSchemeScript/InitColorSchemeScript.tsx', // no need 'use client' because of `styles/index` export
+    ],
   },
   {
     name: 'system',
     rootPath: path.join(process.cwd(), 'packages/mui-system'),
+    ignorePaths: [
+      'packages/mui-system/src/InitColorSchemeScript/InitColorSchemeScript.tsx', // no need 'use client' because of `styles/index` export
+    ],
   },
   {
     name: 'styled-engine',
@@ -47,6 +56,10 @@ const PROJECTS: Project[] = [
     rootPath: path.join(process.cwd(), 'packages/mui-icons-material'),
     additionalPaths: ['custom'],
     additionalFiles: ['src/utils/createSvgIcon.js'],
+  },
+  {
+    name: 'lab',
+    rootPath: path.join(process.cwd(), 'packages/mui-lab'),
   },
 ];
 
@@ -71,21 +84,6 @@ async function processFile(
   const newContents = `${lineToPrepend}\n${contents}`;
 
   await fse.writeFile(filename, newContents);
-}
-
-function getIndexFile(directory: string) {
-  const items = fse.readdirSync(directory);
-
-  const indexFile = items.reduce((prev, curr) => {
-    if (!/^index.(js|ts)/.test(curr)) {
-      return prev;
-    }
-    return curr;
-  }, '');
-
-  return {
-    filename: path.join(directory, indexFile),
-  };
 }
 
 async function findAll(
@@ -124,23 +122,12 @@ async function run(argv: yargs.ArgumentsCamelCase<CommandOptions>) {
       ];
     }
 
-    const indexFile = getIndexFile(projectSrc);
-
-    try {
-      processFile(indexFile.filename);
-    } catch (error: any) {
-      error.message = `${path.relative(process.cwd(), indexFile.filename)}: ${error.message}`;
-      throw error;
-    }
-
     const components = await findAll(directories, grep, findComponents);
 
     components.forEach(async (component) => {
       try {
-        processFile(component.filename);
-
-        if (component.indexFilename) {
-          processFile(component.indexFilename);
+        if (!project.ignorePaths?.some((p) => component.filename.includes(p))) {
+          processFile(component.filename);
         }
       } catch (error: any) {
         error.message = `${path.relative(process.cwd(), component.filename)}: ${error.message}`;
@@ -153,10 +140,6 @@ async function run(argv: yargs.ArgumentsCamelCase<CommandOptions>) {
     hooks.forEach(async (hook) => {
       try {
         processFile(hook.filename);
-
-        if (hook.indexFilename) {
-          processFile(hook.indexFilename);
-        }
       } catch (error: any) {
         error.message = `${path.relative(process.cwd(), hook.filename)}: ${error.message}`;
         throw error;

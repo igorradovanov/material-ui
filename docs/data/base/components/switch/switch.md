@@ -5,13 +5,15 @@ components: Switch
 hooks: useSwitch
 githubLabel: 'component: switch'
 waiAria: https://www.w3.org/WAI/ARIA/apg/patterns/switch/
+newUrl: https://base-ui.com/react/components/switch
+newName: Switch
 ---
 
 # Switch
 
 <p class="description">Switches are UI elements that let users choose between two states—most commonly on/off.</p>
 
-{{"component": "modules/components/ComponentLinkHeader.js", "design": false}}
+{{"component": "@mui/docs/ComponentLinkHeader", "design": false}}
 
 {{"component": "modules/components/ComponentPageTabs.js"}}
 
@@ -23,8 +25,6 @@ The Switch component provides users with a switch for toggling between two mutua
 
 ## Component
 
-### Usage
-
 ```jsx
 import { Switch } from '@mui/base/Switch';
 ```
@@ -34,10 +34,10 @@ import { Switch } from '@mui/base/Switch';
 The Switch component is composed of a root `<span>` that houses three interior slots—a track, a thumb, and an input:
 
 ```html
-<span class="MuiSwitch-root">
-  <span class="MuiSwitch-track"></span>
-  <span class="MuiSwitch-thumb"></span>
-  <input type="checkbox" class="MuiSwitch-input" />
+<span class="base-Switch-root">
+  <span class="base-Switch-track"></span>
+  <span class="base-Switch-thumb"></span>
+  <input type="checkbox" class="base-Switch-input" />
 </span>
 ```
 
@@ -61,9 +61,10 @@ The following code snippet applies a CSS class called `my-thumb` to the thumb sl
 <Switch slotProps={{ thumb: { className: 'my-thumb' } }} />
 ```
 
-#### Usage with TypeScript
+### Usage with TypeScript
 
-In TypeScript, you can specify the custom component type used in the `slots.root` as a generic parameter of the unstyled component. This way, you can safely provide the custom root's props directly on the component:
+In TypeScript, you can specify the custom component type used in the `slots.root` as a generic parameter of the unstyled component.
+This way, you can safely provide the custom root's props directly on the component:
 
 ```tsx
 <Switch<typeof CustomComponent> slots={{ root: CustomComponent }} customProp />
@@ -81,7 +82,7 @@ The same applies for props specific to custom primitive elements:
 import { useSwitch } from '@mui/base/useSwitch';
 ```
 
-The `useSwitch` hook lets you apply the functionality of a switch to a fully custom component.
+The `useSwitch` hook lets you apply the functionality of a Switch to a fully custom component.
 It returns props to be placed on the custom component, along with fields representing the component's internal state.
 
 Hooks _do not_ support [slot props](#custom-structure), but they do support [customization props](#customization).

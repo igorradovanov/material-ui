@@ -10,7 +10,7 @@ export default function ExampleChoiceChipCheckbox() {
   const [value, setValue] = React.useState<string[]>([]);
   return (
     <Sheet variant="outlined" sx={{ width: 360, p: 2, borderRadius: 'sm' }}>
-      <Typography id="rank" level="body-sm" fontWeight="lg" sx={{ mb: 1.5 }}>
+      <Typography id="rank" level="body-sm" sx={{ fontWeight: 'lg', mb: 1.5 }}>
         Choose amenities
       </Typography>
       <div role="group" aria-labelledby="rank">
@@ -21,6 +21,7 @@ export default function ExampleChoiceChipCheckbox() {
             '--List-gap': '8px',
             '--ListItem-radius': '20px',
             '--ListItem-minHeight': '32px',
+            '--ListItem-gap': '4px',
           }}
         >
           {['Elevator', 'Washer/Dryer', 'Fireplace', 'Dogs ok', 'Cats ok'].map(
@@ -30,7 +31,7 @@ export default function ExampleChoiceChipCheckbox() {
                   <Done
                     fontSize="md"
                     color="primary"
-                    sx={{ ml: -0.5, mr: 0.5, zIndex: 2, pointerEvents: 'none' }}
+                    sx={{ ml: -0.5, zIndex: 2, pointerEvents: 'none' }}
                   />
                 )}
                 <Checkbox

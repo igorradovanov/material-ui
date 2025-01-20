@@ -11,24 +11,20 @@ import InsertDriveFileRoundedIcon from '@mui/icons-material/InsertDriveFileRound
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import RemoveCircleOutlineRoundedIcon from '@mui/icons-material/RemoveCircleOutlineRounded';
 
-export default function FileUpload({
-  icon,
-  fileName,
-  fileSize,
-  progress,
-  sx,
-  ...props
-}: CardProps & {
-  icon?: React.ReactElement;
-  fileName: string;
-  fileSize: string;
-  progress: number;
-}) {
+export default function FileUpload(
+  props: CardProps & {
+    icon?: React.ReactElement<any>;
+    fileName: string;
+    fileSize: string;
+    progress: number;
+  },
+) {
+  const { icon, fileName, fileSize, progress, sx, ...other } = props;
   return (
     <Card
       variant="outlined"
       orientation="horizontal"
-      {...props}
+      {...other}
       sx={[
         {
           gap: 1.5,
@@ -41,16 +37,12 @@ export default function FileUpload({
         ratio="1"
         variant="soft"
         color="neutral"
-        sx={{
-          minWidth: 32,
-          borderRadius: '50%',
-          '--Icon-fontSize': '16px',
-        }}
+        sx={{ minWidth: 32, borderRadius: '50%', '--Icon-fontSize': '16px' }}
       >
         <div>{icon ?? <InsertDriveFileRoundedIcon />}</div>
       </AspectRatio>
       <CardContent>
-        <Typography fontSize="sm">{fileName}</Typography>
+        <Typography sx={{ fontSize: 'sm' }}>{fileName}</Typography>
         <Typography level="body-xs">{fileSize}</Typography>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <LinearProgress
@@ -58,14 +50,12 @@ export default function FileUpload({
             value={progress}
             determinate
             sx={[
-              {
-                ...(progress >= 100 && {
-                  color: 'var(--joy-palette-success-solidBg)',
-                }),
+              progress >= 100 && {
+                color: 'var(--joy-palette-success-solidBg)',
               },
             ]}
           />
-          <Typography fontSize="xs">{progress}%</Typography>
+          <Typography sx={{ fontSize: 'xs' }}>{progress}%</Typography>
         </Box>
       </CardContent>
       {progress >= 100 ? (
@@ -73,11 +63,7 @@ export default function FileUpload({
           ratio="1"
           variant="solid"
           color="success"
-          sx={{
-            minWidth: 20,
-            borderRadius: '50%',
-            '--Icon-fontSize': '14px',
-          }}
+          sx={{ minWidth: 20, borderRadius: '50%', '--Icon-fontSize': '14px' }}
         >
           <div>
             <CheckRoundedIcon />

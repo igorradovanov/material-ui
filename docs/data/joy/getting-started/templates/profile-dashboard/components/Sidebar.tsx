@@ -4,6 +4,7 @@ import Avatar from '@mui/joy/Avatar';
 import Box from '@mui/joy/Box';
 import Button from '@mui/joy/Button';
 import Card from '@mui/joy/Card';
+import Chip from '@mui/joy/Chip';
 import Divider from '@mui/joy/Divider';
 import IconButton from '@mui/joy/IconButton';
 import Input from '@mui/joy/Input';
@@ -18,15 +19,15 @@ import Stack from '@mui/joy/Stack';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
-import CollectionsBookmarkRoundedIcon from '@mui/icons-material/CollectionsBookmarkRounded';
+import ShoppingCartRoundedIcon from '@mui/icons-material/ShoppingCartRounded';
 import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';
-import FlagRoundedIcon from '@mui/icons-material/FlagRounded';
+import QuestionAnswerRoundedIcon from '@mui/icons-material/QuestionAnswerRounded';
 import GroupRoundedIcon from '@mui/icons-material/GroupRounded';
 import SupportRoundedIcon from '@mui/icons-material/SupportRounded';
 import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
-import BadgeRoundedIcon from '@mui/icons-material/BadgeRounded';
+import BrightnessAutoRoundedIcon from '@mui/icons-material/BrightnessAutoRounded';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 import ColorSchemeToggle from './ColorSchemeToggle';
@@ -49,14 +50,16 @@ function Toggler({
     <React.Fragment>
       {renderToggle({ open, setOpen })}
       <Box
-        sx={{
-          display: 'grid',
-          gridTemplateRows: open ? '1fr' : '0fr',
-          transition: '0.2s ease',
-          '& > *': {
-            overflow: 'hidden',
+        sx={[
+          {
+            display: 'grid',
+            transition: '0.2s ease',
+            '& > *': {
+              overflow: 'hidden',
+            },
           },
-        }}
+          open ? { gridTemplateRows: '1fr' } : { gridTemplateRows: '0fr' },
+        ]}
       >
         {children}
       </Box>
@@ -69,10 +72,7 @@ export default function Sidebar() {
     <Sheet
       className="Sidebar"
       sx={{
-        position: {
-          xs: 'fixed',
-          md: 'sticky',
-        },
+        position: { xs: 'fixed', md: 'sticky' },
         transform: {
           xs: 'translateX(calc(100% * (var(--SideNavigation-slideIn, 0) - 1)))',
           md: 'none',
@@ -82,8 +82,7 @@ export default function Sidebar() {
         height: '100dvh',
         width: 'var(--Sidebar-width)',
         top: 0,
-        p: 1.5,
-        py: 3,
+        p: 2,
         flexShrink: 0,
         display: 'flex',
         flexDirection: 'column',
@@ -123,9 +122,9 @@ export default function Sidebar() {
       />
       <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
         <IconButton variant="soft" color="primary" size="sm">
-          <BadgeRoundedIcon />
+          <BrightnessAutoRoundedIcon />
         </IconButton>
-        <Typography level="title-lg">Profiles</Typography>
+        <Typography level="title-lg">Acme Co.</Typography>
         <ColorSchemeToggle sx={{ ml: 'auto' }} />
       </Box>
       <Input size="sm" startDecorator={<SearchRoundedIcon />} placeholder="Search" />
@@ -168,14 +167,17 @@ export default function Sidebar() {
           </ListItem>
 
           <ListItem>
-            <ListItemButton>
-              <CollectionsBookmarkRoundedIcon />
+            <ListItemButton
+              role="menuitem"
+              component="a"
+              href="/joy-ui/getting-started/templates/order-dashboard/"
+            >
+              <ShoppingCartRoundedIcon />
               <ListItemContent>
-                <Typography level="title-sm">Projects</Typography>
+                <Typography level="title-sm">Orders</Typography>
               </ListItemContent>
             </ListItemButton>
           </ListItem>
-
           <ListItem nested>
             <Toggler
               renderToggle={({ open, setOpen }) => (
@@ -185,7 +187,9 @@ export default function Sidebar() {
                     <Typography level="title-sm">Tasks</Typography>
                   </ListItemContent>
                   <KeyboardArrowDownIcon
-                    sx={{ transform: open ? 'rotate(180deg)' : 'none' }}
+                    sx={[
+                      open ? { transform: 'rotate(180deg)' } : { transform: 'none' },
+                    ]}
                   />
                 </ListItemButton>
               )}
@@ -206,13 +210,19 @@ export default function Sidebar() {
               </List>
             </Toggler>
           </ListItem>
-
           <ListItem>
-            <ListItemButton>
-              <FlagRoundedIcon />
+            <ListItemButton
+              role="menuitem"
+              component="a"
+              href="/joy-ui/getting-started/templates/messages/"
+            >
+              <QuestionAnswerRoundedIcon />
               <ListItemContent>
-                <Typography level="title-sm">Reporting</Typography>
+                <Typography level="title-sm">Messages</Typography>
               </ListItemContent>
+              <Chip size="sm" color="primary" variant="solid">
+                4
+              </Chip>
             </ListItemButton>
           </ListItem>
           <ListItem nested>
@@ -225,7 +235,9 @@ export default function Sidebar() {
                     <Typography level="title-sm">Users</Typography>
                   </ListItemContent>
                   <KeyboardArrowDownIcon
-                    sx={{ transform: open ? 'rotate(180deg)' : 'none' }}
+                    sx={[
+                      open ? { transform: 'rotate(180deg)' } : { transform: 'none' },
+                    ]}
                   />
                 </ListItemButton>
               )}
@@ -244,7 +256,6 @@ export default function Sidebar() {
             </Toggler>
           </ListItem>
         </List>
-
         <List
           size="sm"
           sx={{
@@ -275,7 +286,10 @@ export default function Sidebar() {
           size="sm"
           sx={{ boxShadow: 'none' }}
         >
-          <Stack direction="row" justifyContent="space-between" alignItems="center">
+          <Stack
+            direction="row"
+            sx={{ justifyContent: 'space-between', alignItems: 'center' }}
+          >
             <Typography level="title-sm">Used space</Typography>
             <IconButton size="sm">
               <CloseRoundedIcon />
